@@ -63,5 +63,16 @@ def eurostoxx():
     data.reset_index(drop=True, inplace=True)
     data.to_csv('refined/eurostoxx_ref.csv', index_label='index')
 
+def fsi():
+    raw_data = pd.read_csv("raw/fsi_raw.csv", sep=',', parse_dates=['Date'])
 
-eurostoxx()
+    # Select only values from the eurozone (https://de.wikipedia.org/wiki/Eurozone)
+    data = raw_data.loc[(raw_data['Date'].dt.year > 2007)]
+
+    data = data.sort_values(by=['Date'])
+    data.reset_index(drop=True, inplace=True)
+    data.drop(['United States', 'Emerging markets', 'Other advanced economies'], inplace=True, axis=1)
+    print(data.head())
+    data.to_csv('refined/fsi_ref.csv', index_label='index')
+
+fsi()
